@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id             String          @id @default(cuid())
+  name           String
+  type           AccountType
+  balance        Float           @default(0)
+  color          String          @default("#6366F1")
+  icon           String          @default("wallet")
+  currency       String          @default("ILS")
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  transactions   Transaction[]   @relation("AccountTransactions")
+  toTransactions Transaction[]   @relation("ToAccountTransactions")
+  recurringItems RecurringItem[]
+  goals          Goal[]
+}
+
+enum AccountType {
+  CHECKING
+  CREDIT
+  SAVINGS
+  INVESTMENT
+  LOAN
+  PENSION
+  STUDY_FUND
+  OTHER
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  amount      Float
+  type        TransactionType
+  category    String
+  description String?
+  date        DateTime
+  accountId   String
+  toAccountId String?
+  account     Account         @relation("AccountTransactions", fields: [accountId], references: [id])
+  toAccount   Account?        @relation("ToAccountTransactions", fields: [toAccountId], references: [id])
+  createdAt   DateTime        @default(now())
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+model Category {
+  id       String   @id @default(cuid())
+  name     String
+  icon     String   @default("tag")
+  color    String   @default("#6366F1")
+  budget   Float?
+  keywords String[]
+}
+
+model RecurringItem {
+  id          String    @id @default(cuid())
+  name        String
+  amount      Float
+  accountId   String
+  account     Account   @relation(fields: [accountId], references: [id])
+  paymentType String
+  frequency   Frequency
+  dayOfMonth  Int
+  isActive    Boolean   @default(true)
+  category    String
+  createdAt   DateTime  @default(now())
+}
+
+enum Frequency {
+  MONTHLY
+  WEEKLY
+  YEARLY
+}
+
+model Goal {
+  id            String    @id @default(cuid())
+  name          String
+  targetAmount  Float
+  currentAmount Float     @default(0)
+  deadline      DateTime?
+  accountId     String?
+  account       Account?  @relation(fields: [accountId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
+model Settings {
+  id       String @id @default("default")
+  currency String @default("ILS")
+  locale   String @default("he-IL")
+  theme    String @default("dark")
+}
