@@ -5,6 +5,8 @@ import { MonthlyChart } from '@/components/dashboard/MonthlyChart'
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions'
 import { startOfMonth, endOfMonth, subMonths, format } from 'date-fns'
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const now = new Date()
   const monthStart = startOfMonth(now)

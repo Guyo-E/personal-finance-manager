@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { detectCategory } from '@/lib/categorize'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const accountId = searchParams.get('accountId')
