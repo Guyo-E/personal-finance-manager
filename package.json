@@ -46,4 +46,11 @@
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
+    "start": "next start",
+    "lint": "eslint"
+  }
 }
