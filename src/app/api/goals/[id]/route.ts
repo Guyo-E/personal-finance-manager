@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  await db.goal.delete({ where: { id: params.id } })
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  await db.goal.delete({ where: { id } })
   return NextResponse.json({ success: true })
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const body = await req.json()
-  const goal = await db.goal.update({ where: { id: params.id }, data: body })
+  const goal = await db.goal.update({ where: { id }, data: body })
   return NextResponse.json(goal)
 }
