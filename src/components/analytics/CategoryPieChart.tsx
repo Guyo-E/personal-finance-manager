@@ -18,7 +18,7 @@ export function CategoryPieChart({ data }: { data: { name: string; value: number
               cy="50%"
               outerRadius={90}
               dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
               labelLine={false}
             >
               {data.map((_, i) => (
@@ -27,7 +27,7 @@ export function CategoryPieChart({ data }: { data: { name: string; value: number
             </Pie>
             <Tooltip
               contentStyle={{ background: '#0F172A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
-              formatter={(val: number) => [`₪${val.toLocaleString('he-IL')}`, '']}
+              formatter={(val) => [`₪${Number(val).toLocaleString('he-IL')}`, '']}
             />
           </PieChart>
         </ResponsiveContainer>
