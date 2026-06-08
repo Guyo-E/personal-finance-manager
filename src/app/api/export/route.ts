@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { unparse } from 'papaparse'
-import type { Transaction, Account } from '@prisma/client'
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const from = searchParams.get('from')
@@ -19,7 +17,7 @@ export async function GET(req: Request) {
     orderBy: { date: 'desc' },
   })
 
-  const rows = transactions.map((t: Transaction & { account: Account }) => ({
+  const rows = transactions.map((t) => ({
     תאריך: t.date.toLocaleDateString('he-IL'),
     סוג: t.type === 'INCOME' ? 'הכנסה' : t.type === 'EXPENSE' ? 'הוצאה' : 'העברה',
     קטגוריה: t.category,
